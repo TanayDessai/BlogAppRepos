@@ -5,6 +5,15 @@ import BlogList from "./components/BlogList";
 import BlogForm from "./components/BlogForm";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
+import Image from "react-bootstrap/Image";
+import blogImg from "./blog.jpeg";
+import styled from "styled-components";
+
+export const Heading = styled.h2`
+  text-align: center;
+  margin-top: 5rem;
+  font-family: "Poppins", sans-serif;
+`;
 
 const initialState = { blogs: [] };
 
@@ -80,15 +89,24 @@ const App = () => {
 
   return (
     <Router>
-        <NavBar onSearch={handleSearch}/>
-        <Routes>
-          <Route
-            path="/"
-            element={<BlogList blogs={state.blogs} dispatch={dispatch} />}
-          />
-          <Route path="/add" element={<BlogForm addBlog={addBlog} />} />
-        </Routes>
-        <Footer />
+      <NavBar onSearch={handleSearch} />
+      <Heading className="text-center mt-5">
+        "Words Create Worlds: Welcome to Our Blogging Universe."
+      </Heading>
+      <Image
+        src={blogImg}
+        fluid
+        className="mt-5"
+        style={{ width: "100%", margin: "0 auto", justifyContent: "center" }}
+      />
+      <Routes>
+        <Route
+          path="/"
+          element={<BlogList blogs={state.blogs} dispatch={dispatch} />}
+        />
+        <Route path="/add" element={<BlogForm addBlog={addBlog} />} />
+      </Routes>
+      <Footer />
     </Router>
   );
 };

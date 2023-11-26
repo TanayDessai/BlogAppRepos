@@ -1,20 +1,46 @@
-import React,{useState} from "react";
-import { Navbar, Nav, Container, Form, FormControl, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import {
+  Navbar,
+  Nav,
+  Container,
+  Form,
+  FormControl,
+  Button,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-const NavBar = ({onSearch}) => {
+const StyledNavbar = styled(Navbar)`
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
 
-    const [searchQuery, setSearchQuery] = useState("");
+const StyledBrand = styled(Navbar.Brand)`
+  font-family: "Poppins";
+  font-size: 24px;
+  font-weight: bold;
+`;
 
-    const handleSearch = () => {
-      onSearch(searchQuery);
-    };
+const StyledForm = styled(Form)`
+  display: flex;
+  align-items: center;
+`;
+
+const StyledButton = styled(Button)`
+  margin-left: 10px;
+`;
+
+const NavBar = ({ onSearch }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = () => {
+    onSearch(searchQuery);
+  };
 
   return (
-    <Navbar bg="light" expand="lg">
+    <StyledNavbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="/">Blogs</Navbar.Brand>
-        <Form className="d-flex">
+        <StyledBrand href="/">Blogs..</StyledBrand>
+        <StyledForm className="d-flex">
           <FormControl
             type="text"
             placeholder="Search..."
@@ -22,10 +48,10 @@ const NavBar = ({onSearch}) => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <Button variant="outline-primary" onClick={handleSearch}>
+          <StyledButton variant="outline-primary" onClick={handleSearch}>
             Search
-          </Button>
-        </Form>
+          </StyledButton>
+        </StyledForm>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="mr-auto">
@@ -35,7 +61,7 @@ const NavBar = ({onSearch}) => {
           </Nav>
         </Navbar.Collapse>
       </Container>
-    </Navbar>
+    </StyledNavbar>
   );
 };
 

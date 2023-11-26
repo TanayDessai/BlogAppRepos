@@ -1,19 +1,36 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
+import styled from "styled-components";
+
+const StyledFooter = styled.footer`
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  margin-top: 5em;
+`;
+
+const StyledH5 = styled.h5`
+  color: #fff;
+`;
+
+const StyledTextCenter = styled.p`
+  color: #fff;
+  font-size: 18px;
+`;
 
 const Footer = () => {
   return (
-    <footer className="mt-5">
+    <StyledFooter>
       <Container>
         <Row>
           <Col md={4}>
-            <h5>Contact Us</h5>
+            <StyledH5>Contact Us</StyledH5>
             <p>Email: tanaydesai@gmail.com</p>
             <p>Phone: 9373001584</p>
           </Col>
           <Col md={4}>
-            <h5>Follow Us</h5>
+            <StyledH5>Follow Us</StyledH5>
             <div>
               <a
                 href="https://www.facebook.com/"
@@ -39,19 +56,19 @@ const Footer = () => {
             </div>
           </Col>
           <Col md={4}>
-            <h5>Disclaimer</h5>
+            <StyledH5>Disclaimer</StyledH5>
             <p>This is a sample blog application. All rights reserved.</p>
           </Col>
         </Row>
         <Row className="mt-3">
           <Col>
-            <p className="text-center">
+            <StyledTextCenter>
               &copy; {new Date().getFullYear()} Your Blog App
-            </p>
+            </StyledTextCenter>
           </Col>
         </Row>
       </Container>
-    </footer>
+    </StyledFooter>
   );
 };
 

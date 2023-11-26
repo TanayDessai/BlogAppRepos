@@ -77,8 +77,25 @@ const BlogList = ({ blogs, dispatch }) => {
           <Col key={index}>
             <Card>
               <Card.Body>
-                <Card.Title>{blog.title}</Card.Title>
-                <Card.Text>{blog.body}</Card.Text>
+                <Card.Title
+                  style={{
+                    backgroundColor: "#3498db",
+                    color: "#fff",
+                    padding: "8px",
+                    borderRadius: "5px 5px 0 0",
+                  }}
+                >
+                  {blog.title}
+                </Card.Title>
+                <Card.Text
+                  style={{
+                    color: "#333",
+                    fontSize: "16px",
+                    fontFamily: "Poppins",
+                  }}
+                >
+                  {blog.body}
+                </Card.Text>
                 <Card.Text>
                   Date: {new Date(blog.date).toLocaleDateString()}
                 </Card.Text>
