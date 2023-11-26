@@ -1,9 +1,7 @@
-// BlogList.js
 import React, { useState } from "react";
 import { Button, Pagination } from "react-bootstrap";
 
 const BlogList = ({ blogs, dispatch }) => {
-  // Your existing code...
   const [updatedBlog, setUpdatedBlog] = useState("");
   const [updateMode, setUpdateMode] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);

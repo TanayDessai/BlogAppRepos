@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer} from "react";
 import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import BlogList from "./components/BlogList";
@@ -33,6 +33,7 @@ const reducer = (state, action) => {
       return state;
   }
 };
+
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);

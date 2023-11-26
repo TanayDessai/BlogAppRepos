@@ -1,4 +1,3 @@
-// Search.js
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 
@@ -26,7 +25,7 @@ const Search = ({ blogs }) => {
           onChange={(e) => {
             setSearchQuery(e.target.value);
             if (!e.target.value.trim()) {
-              setSearchResults([]); // Clear results if search query is empty
+              setSearchResults([]);
             }
           }}
         />
@@ -42,7 +41,7 @@ const Search = ({ blogs }) => {
               <p>Date: {new Date(blog.date).toLocaleDateString()}</p>
             </div>
           ))
-        : // Display all posts when the search query is empty
+        : 
           blogs.map((blog, index) => (
             <div key={index} className="Post">
               <h3>{blog.title}</h3>
