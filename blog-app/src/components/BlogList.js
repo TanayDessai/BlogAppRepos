@@ -1,5 +1,9 @@
-import React, { useState } from "react";
-import { Button, Pagination } from "react-bootstrap";
+// BlogList.js
+import React, { useState, useEffect } from "react";
+import { Form } from "react-bootstrap";
+import { Button, Card, Row, Col, Container } from "react-bootstrap";
+import { fetchPosts } from "../services/api";
+import Pagination from "./Pagination";
 
 const BlogList = ({ blogs, dispatch }) => {
   const [updatedBlog, setUpdatedBlog] = useState("");
@@ -7,11 +11,24 @@ const BlogList = ({ blogs, dispatch }) => {
   const [currentIndex, setCurrentIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 1;
+  const postsPerPage = 10;
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const posts = await fetchPosts();
+        dispatch({ type: "ADD_JSON_PLACEHOLDER_POSTS", payload: { posts } });
+      } catch (error) {
+        console.error("Error loading posts:", error);
+      }
+    };
+
+    loadPosts();
+  }, [dispatch]);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPost = blogs.slice(indexOfFirstPost, indexOfLastPost)[0];
+  const currentPosts = blogs.slice(indexOfFirstPost, indexOfLastPost);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -45,68 +62,72 @@ const BlogList = ({ blogs, dispatch }) => {
     }
   };
 
-  const handleSearch = () => {
-    return currentPost && !searchQuery ? (
-      <div key={indexOfFirstPost} className="Post">
-        <h3>{currentPost.title}</h3>
-        <p>{currentPost.body}</p>
-        <p>Date: {new Date(currentPost.date).toLocaleDateString()}</p>
-        {updateMode && currentIndex === indexOfFirstPost && (
-          <div>
-            <textarea
-              value={updatedBlog}
-              onChange={(e) => setUpdatedBlog(e.target.value)}
-            />
-            <button className="btn btn-success" onClick={handleUpdateConfirm}>
-              Confirm Update
-            </button>
-          </div>
-        )}
-        {!updateMode && (
-          <>
-            <button
-              className="btn btn-success"
-              onClick={() => handleUpdate(indexOfFirstPost)}
-            >
-              Update
-            </button>
-            <button
-              className="btn btn-danger"
-              onClick={() => handleDelete(indexOfFirstPost)}
-            >
-              Delete
-            </button>
-          </>
-        )}
-      </div>
-    ) : null;
-  };
-
+  const filteredBlogs = searchQuery
+    ? blogs.filter(
+        (blog) =>
+          blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          blog.body.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : blogs;
 
   return (
-    <div>
-      {searchQuery && (
-        <div>
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <Button variant="info" onClick={handleSearch}>
-            Search
-          </Button>
-        </div>
-      )}
-      {handleSearch()}
+    <Container className="mt-5">
+      <Row xs={1} md={3} className="g-4">
+        {currentPosts.map((blog, index) => (
+          <Col key={index}>
+            <Card>
+              <Card.Body>
+                <Card.Title>{blog.title}</Card.Title>
+                <Card.Text>{blog.body}</Card.Text>
+                <Card.Text>
+                  Date: {new Date(blog.date).toLocaleDateString()}
+                </Card.Text>
+                {updateMode && currentIndex === index && (
+                  <div className="mb-3">
+                    <Form.Control
+                      as="textarea"
+                      value={updatedBlog}
+                      onChange={(e) => setUpdatedBlog(e.target.value)}
+                    />
+                    <Button
+                      variant="success"
+                      onClick={handleUpdateConfirm}
+                      className="mt-2"
+                    >
+                      Confirm Update
+                    </Button>
+                  </div>
+                )}
+                {!updateMode && (
+                  <div>
+                    <Button
+                      variant="outline-success"
+                      onClick={() => handleUpdate(index)}
+                      className="me-2"
+                    >
+                      Update
+                    </Button>
+                    <Button
+                      variant="outline-danger"
+                      onClick={() => handleDelete(index)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                )}
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
       {!searchQuery && (
         <Pagination
-          totalPages={Math.ceil(blogs.length / postsPerPage)}
+          totalPages={Math.ceil(filteredBlogs.length / postsPerPage)}
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
       )}
-    </div>
+    </Container>
   );
 };
 

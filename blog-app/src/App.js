@@ -1,9 +1,8 @@
-import React, { useReducer} from "react";
+import React, { useEffect, useReducer } from "react";
 import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import BlogList from "./components/BlogList";
 import BlogForm from "./components/BlogForm";
-import Search from "./components/Search";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 
@@ -16,7 +15,7 @@ const reducer = (state, action) => {
         ...action.payload.blog,
         date: new Date().toISOString(),
       };
-      return { ...state, blogs: [...state.blogs, newBlog] };
+      return { ...state, blogs: [newBlog, ...state.blogs] };
     case "DELETE_BLOG":
       return {
         ...state,
@@ -37,6 +36,30 @@ const reducer = (state, action) => {
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+   useEffect(() => {
+     const fetchPosts = async () => {
+       try {
+         const response = await fetch(
+           "https://jsonplaceholder.typicode.com/posts"
+         );
+         const posts = await response.json();
+         const formattedPosts = posts.map((post) => ({
+           title: post.title,
+           body: post.body,
+           date: new Date().toISOString(),
+         }));
+         dispatch({
+           type: "ADD_JSON_PLACEHOLDER_POSTS",
+           payload: { posts: formattedPosts },
+         });
+       } catch (error) {
+         console.error("Error fetching posts:", error);
+       }
+     };
+
+     fetchPosts();
+   }, []);
 
   const addBlog = (blog) => {
     dispatch({ type: "ADD_BLOG", payload: { blog } });
@@ -64,7 +87,6 @@ const App = () => {
             element={<BlogList blogs={state.blogs} dispatch={dispatch} />}
           />
           <Route path="/add" element={<BlogForm addBlog={addBlog} />} />
-          <Route path="/search" element={<Search blogs={state.blogs} />} />
         </Routes>
         <Footer />
     </Router>

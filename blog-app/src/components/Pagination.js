@@ -9,7 +9,7 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
 
   return (
     <nav>
-      <BootstrapPagination>
+      <BootstrapPagination className="mt-5">
         {pageNumbers.map((page) => (
           <BootstrapPagination.Item
             key={page}
