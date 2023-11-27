@@ -97,7 +97,7 @@ const BlogList = ({ blogs, dispatch, searchQuery ,props}) => {
       <Row xs={1} md={3} className="g-4">
         {currentPosts.map((blog, index) => (
           <Col key={index}>
-            <Card>
+            <Card style={{ boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
               <Card.Body>
                 <Card.Title
                   style={{
@@ -118,9 +118,6 @@ const BlogList = ({ blogs, dispatch, searchQuery ,props}) => {
                 >
                   {blog.body.charAt(0).toUpperCase() + blog.body.slice(1)}
                 </Card.Text>
-                <Card.Text>
-                  Date: {new Date(blog.date).toLocaleDateString()}
-                </Card.Text>
                 {updateMode && currentIndex === index && (
                   <div className="mb-3">
                     <Form.Control
@@ -138,7 +135,7 @@ const BlogList = ({ blogs, dispatch, searchQuery ,props}) => {
                   </div>
                 )}
                 {!updateMode && (
-                  <div>
+                  <div className="mt-4">
                     <Button
                       variant="outline-success"
                       onClick={() => handleUpdate(index)}
@@ -152,6 +149,15 @@ const BlogList = ({ blogs, dispatch, searchQuery ,props}) => {
                     >
                       Delete
                     </Button>
+                    <Card.Text
+                      style={{
+                        textAlign: "right",
+                        fontSize: "12px",
+                        color: "rgba(128, 128, 128, 0.7)",
+                      }}
+                    >
+                      Date: {new Date(blog.date).toLocaleDateString()}
+                    </Card.Text>
                   </div>
                 )}
               </Card.Body>

@@ -21,7 +21,7 @@ const StyledTextCenter = styled.p`
 
 const Footer = () => {
   return (
-    <StyledFooter>
+    <StyledFooter >
       <Container>
         <Row>
           <Col md={4}>
