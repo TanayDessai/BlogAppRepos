@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import BlogList from "./components/BlogList";
@@ -25,6 +25,9 @@ const reducer = (state, action) => {
         date: new Date().toISOString(),
       };
       return { ...state, blogs: [newBlog, ...state.blogs] };
+      //for fetching from jsonplaceholder
+    // case "ADD_JSON_PLACEHOLDER_POSTS":
+    //   return { ...state, blogs: action.payload.posts};
     case "DELETE_BLOG":
       return {
         ...state,
@@ -45,6 +48,7 @@ const reducer = (state, action) => {
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [searchQuery, setSearchQuery] = useState(""); 
 
    useEffect(() => {
      const fetchPosts = async () => {
@@ -70,22 +74,26 @@ const App = () => {
      fetchPosts();
    }, []);
 
+
   const addBlog = (blog) => {
     dispatch({ type: "ADD_BLOG", payload: { blog } });
   };
 
-  const handleSearch = (searchQuery) => {
-    if (searchQuery.trim() === "") {
-      dispatch({ type: "RESET_SEARCH" });
-    } else {
-      const filteredBlogs = state.blogs.filter(
-        (blog) =>
-          blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          blog.body.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      dispatch({ type: "SET_SEARCH_RESULTS", payload: { filteredBlogs } });
-    }
-  };
+  // const handleSearch = (searchQuery) => {
+  //   if (searchQuery.trim() === "") {
+  //     dispatch({ type: "RESET_SEARCH" });
+  //   } else {
+  //     const filteredBlogs = state.blogs.filter(
+  //       (blog) =>
+  //         blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //         blog.body.toLowerCase().includes(searchQuery.toLowerCase())
+  //     );
+  //     dispatch({ type: "SET_SEARCH_RESULTS", payload: { filteredBlogs } });
+  //   }
+  // };
+   const handleSearch = (searchQuery) => {
+     setSearchQuery(searchQuery);
+   };
 
   return (
     <Router>
@@ -93,16 +101,22 @@ const App = () => {
       <Heading className="text-center mt-5">
         "Words Create Worlds: Welcome to Our Blogging Universe."
       </Heading>
-      <Image
+      {/* <Image
         src={blogImg}
         fluid
         className="mt-5"
         style={{ width: "100%", margin: "0 auto", justifyContent: "center" }}
-      />
+      /> */}
       <Routes>
         <Route
           path="/"
-          element={<BlogList blogs={state.blogs} dispatch={dispatch} />}
+          element={
+            <BlogList
+              blogs={state.blogs}
+              dispatch={dispatch}
+              searchQuery={searchQuery}
+            />
+          }
         />
         <Route path="/add" element={<BlogForm addBlog={addBlog} />} />
       </Routes>

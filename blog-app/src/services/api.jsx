@@ -6,20 +6,6 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// export const fetchPosts = async () => {
-//   try {
-//     const response = await api.get("/posts");
-//     return response.data.map((post) => ({
-//       title: post.title,
-//       body: post.body,
-//       date: new Date(post.date).toISOString(),
-//     }));
-//   } catch (error) {
-//     console.error("Error fetching posts:", error);
-//     throw error;
-//   }
-// };
-
 export const fetchPosts = async () => {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/posts");
@@ -27,7 +13,7 @@ export const fetchPosts = async () => {
     return posts.map((post) => ({
       title: post.title,
       body: post.body,
-      date: new Date().toISOString(), // Adjust this line
+      date: new Date().toISOString(),
     }));
   } catch (error) {
     console.error("Error fetching posts:", error);

@@ -1,17 +1,15 @@
-// BlogList.js
 import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { Button, Card, Row, Col, Container } from "react-bootstrap";
 import { fetchPosts } from "../services/api";
 import Pagination from "./Pagination";
 
-const BlogList = ({ blogs, dispatch }) => {
+const BlogList = ({ blogs, dispatch,searchQuery}) => {
   const [updatedBlog, setUpdatedBlog] = useState("");
   const [updateMode, setUpdateMode] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 10;
+  const postsPerPage = 9;
 
   useEffect(() => {
     const loadPosts = async () => {
