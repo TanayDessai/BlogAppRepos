@@ -105,6 +105,7 @@ const BlogList = ({ blogs, dispatch, searchQuery ,props}) => {
                     color: "#fff",
                     padding: "8px",
                     borderRadius: "5px 5px 0 0",
+                    boxShadow: "0 4px 8px rgba(7, 159, 238, 0.72)",
                   }}
                 >
                   {blog.title.charAt(0).toUpperCase() + blog.title.slice(1)}
@@ -115,6 +116,7 @@ const BlogList = ({ blogs, dispatch, searchQuery ,props}) => {
                     fontSize: "16px",
                     fontFamily: "Poppins",
                   }}
+                  className="mt-3"
                 >
                   {blog.body.charAt(0).toUpperCase() + blog.body.slice(1)}
                 </Card.Text>
