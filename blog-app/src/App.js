@@ -24,8 +24,8 @@ const reducer = (state, action) => {
       };
       return { ...state, blogs: [newBlog, ...state.blogs] };
       //for fetching from jsonplaceholder
-    case "ADD_JSON_PLACEHOLDER_POSTS":
-      return { ...state, blogs: action.payload.posts};
+    // case "ADD_JSON_PLACEHOLDER_POSTS":
+    //   return { ...state, blogs: action.payload.posts};
     case "DELETE_BLOG":
       return {
         ...state,
