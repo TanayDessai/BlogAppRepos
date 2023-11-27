@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import { Button, Card, Row, Col, Container } from "react-bootstrap";
 import { fetchPosts } from "../services/api";
 import Pagination from "./Pagination";
 
-const BlogList = ({ blogs, dispatch,searchQuery}) => {
+const BlogList = ({ blogs, dispatch, searchQuery ,props}) => {
   const [updatedBlog, setUpdatedBlog] = useState("");
   const [updateMode, setUpdateMode] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showUpdateConfirmationModal, setShowUpdateConfirmationModal] =
+    useState(false);
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
   const postsPerPage = 9;
 
   useEffect(() => {
@@ -38,25 +42,45 @@ const BlogList = ({ blogs, dispatch,searchQuery}) => {
     setUpdatedBlog(blogs[index].body);
   };
 
+  const handleShowUpdateConfirmationModal = () => {
+    setShowUpdateConfirmationModal(true);
+  };
+
+  const handleCloseUpdateConfirmationModal = () => {
+    setShowUpdateConfirmationModal(false);
+  };
+
   const handleUpdateConfirm = () => {
     if (currentIndex !== null) {
-      const confirmed = window.confirm("Do you want to update this blog?");
-      if (confirmed) {
-        dispatch({
-          type: "UPDATE_BLOG",
-          payload: { index: currentIndex, updatedBlog },
-        });
-        setUpdatedBlog("");
-        setUpdateMode(false);
-        setCurrentIndex(null);
-      }
+      handleCloseUpdateConfirmationModal();
+      dispatch({
+        type: "UPDATE_BLOG",
+        payload: { index: currentIndex, updatedBlog },
+      });
+      setUpdatedBlog("");
+      setUpdateMode(false);
+      setCurrentIndex(null);
     }
   };
 
   const handleDelete = (index) => {
-    const confirmed = window.confirm("Do you want to delete this blog?");
-    if (confirmed) {
-      dispatch({ type: "DELETE_BLOG", payload: { index } });
+    setCurrentIndex(index);
+    handleShowDeleteConfirmationModal();
+  };
+
+  const handleShowDeleteConfirmationModal = () => {
+    setShowDeleteConfirmationModal(true);
+  };
+
+  const handleCloseDeleteConfirmationModal = () => {
+    setShowDeleteConfirmationModal(false);
+    setCurrentIndex(null);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (currentIndex !== null) {
+      handleCloseDeleteConfirmationModal();
+      dispatch({ type: "DELETE_BLOG", payload: { index: currentIndex } });
     }
   };
 
@@ -83,7 +107,7 @@ const BlogList = ({ blogs, dispatch,searchQuery}) => {
                     borderRadius: "5px 5px 0 0",
                   }}
                 >
-                  {blog.title}
+                  {blog.title.charAt(0).toUpperCase() + blog.title.slice(1)}
                 </Card.Title>
                 <Card.Text
                   style={{
@@ -92,7 +116,7 @@ const BlogList = ({ blogs, dispatch,searchQuery}) => {
                     fontFamily: "Poppins",
                   }}
                 >
-                  {blog.body}
+                  {blog.body.charAt(0).toUpperCase() + blog.body.slice(1)}
                 </Card.Text>
                 <Card.Text>
                   Date: {new Date(blog.date).toLocaleDateString()}
@@ -106,7 +130,7 @@ const BlogList = ({ blogs, dispatch,searchQuery}) => {
                     />
                     <Button
                       variant="success"
-                      onClick={handleUpdateConfirm}
+                      onClick={handleShowUpdateConfirmationModal}
                       className="mt-2"
                     >
                       Confirm Update
@@ -135,12 +159,64 @@ const BlogList = ({ blogs, dispatch,searchQuery}) => {
           </Col>
         ))}
       </Row>
+
+      {/* Pagination and Modal components */}
       {!searchQuery && (
-        <Pagination
-          totalPages={Math.ceil(filteredBlogs.length / postsPerPage)}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-        />
+        <>
+          <Pagination
+            totalPages={Math.ceil(filteredBlogs.length / postsPerPage)}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+          <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            show={showUpdateConfirmationModal}
+            onHide={handleCloseUpdateConfirmationModal}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Confirmation</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Do you want to update this blog?</Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={handleCloseUpdateConfirmationModal}
+              >
+                Cancel
+              </Button>
+              <Button variant="success" onClick={handleUpdateConfirm}>
+                Update
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            show={showDeleteConfirmationModal}
+            onHide={handleCloseDeleteConfirmationModal}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Confirmation</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Do you want to delete this blog?</Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={handleCloseDeleteConfirmationModal}
+              >
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={handleDeleteConfirm}>
+                Delete
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </>
       )}
     </Container>
   );

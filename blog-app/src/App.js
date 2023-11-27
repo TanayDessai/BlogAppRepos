@@ -5,8 +5,6 @@ import BlogList from "./components/BlogList";
 import BlogForm from "./components/BlogForm";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
-import Image from "react-bootstrap/Image";
-import blogImg from "./blog.jpeg";
 import styled from "styled-components";
 
 export const Heading = styled.h2`
@@ -26,8 +24,8 @@ const reducer = (state, action) => {
       };
       return { ...state, blogs: [newBlog, ...state.blogs] };
       //for fetching from jsonplaceholder
-    // case "ADD_JSON_PLACEHOLDER_POSTS":
-    //   return { ...state, blogs: action.payload.posts};
+    case "ADD_JSON_PLACEHOLDER_POSTS":
+      return { ...state, blogs: action.payload.posts};
     case "DELETE_BLOG":
       return {
         ...state,
@@ -78,19 +76,6 @@ const App = () => {
   const addBlog = (blog) => {
     dispatch({ type: "ADD_BLOG", payload: { blog } });
   };
-
-  // const handleSearch = (searchQuery) => {
-  //   if (searchQuery.trim() === "") {
-  //     dispatch({ type: "RESET_SEARCH" });
-  //   } else {
-  //     const filteredBlogs = state.blogs.filter(
-  //       (blog) =>
-  //         blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //         blog.body.toLowerCase().includes(searchQuery.toLowerCase())
-  //     );
-  //     dispatch({ type: "SET_SEARCH_RESULTS", payload: { filteredBlogs } });
-  //   }
-  // };
    const handleSearch = (searchQuery) => {
      setSearchQuery(searchQuery);
    };
@@ -101,12 +86,6 @@ const App = () => {
       <Heading className="text-center mt-5">
         "Words Create Worlds: Welcome to Our Blogging Universe."
       </Heading>
-      {/* <Image
-        src={blogImg}
-        fluid
-        className="mt-5"
-        style={{ width: "100%", margin: "0 auto", justifyContent: "center" }}
-      /> */}
       <Routes>
         <Route
           path="/"
