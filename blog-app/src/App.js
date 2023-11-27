@@ -6,6 +6,7 @@ import BlogForm from "./components/BlogForm";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import styled from "styled-components";
+import { createPost } from "./services/api";
 
 export const Heading = styled.h2`
   text-align: center;
@@ -24,8 +25,8 @@ const reducer = (state, action) => {
       };
       return { ...state, blogs: [newBlog, ...state.blogs] };
       //for fetching from jsonplaceholder
-    // case "ADD_JSON_PLACEHOLDER_POSTS":
-    //   return { ...state, blogs: action.payload.posts};
+    case "ADD_JSON_PLACEHOLDER_POSTS":
+      return { ...state, blogs: action.payload.posts};
     case "DELETE_BLOG":
       return {
         ...state,
@@ -73,9 +74,20 @@ const App = () => {
    }, []);
 
 
-  const addBlog = (blog) => {
-    dispatch({ type: "ADD_BLOG", payload: { blog } });
+  // const addBlog = (blog) => {
+  //   dispatch({ type: "ADD_BLOG", payload: { blog } });
+  // };
+
+  const addBlog = async (blog) => {
+    try {
+      const createdBlog = await createPost(blog); // Assuming createPost is an asynchronous function
+      dispatch({ type: "ADD_BLOG", payload: { blog: createdBlog } });
+      console.log("Blog post created successfully");
+    } catch (error) {
+      console.error("Error creating blog post:", error);
+    }
   };
+
    const handleSearch = (searchQuery) => {
      setSearchQuery(searchQuery);
    };
